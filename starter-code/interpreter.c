@@ -139,6 +139,29 @@ int source(char *script) {
 }
 
 int echo(char *string){
-	printf("%s\n", string);
- 	return 0;
+	int errCode = 0;
+	if (string[0] == '$'){
+		if (strlen(string) == 1){
+			print("\n");
+			errCode = 1;
+		}
+		else{
+			int len = strlen(string);
+			char var[len-1];
+			strncpy(var, string+1, len-1);
+			char *val = mem_get_value(var);
+			if(strcmp(val, "Variable does not exist") == 0){
+				print("\n");
+				errCode = 2;
+			}
+			else{
+				print("variable exists");
+				printf("%s\n", val);
+			}
+		}
+	}
+	else{
+		printf("%s\n", string);
+	}
+	return errCode;
 }
