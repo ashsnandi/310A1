@@ -33,10 +33,14 @@ int main(int argc, char *argv[]) {
         }
         // here you should check the unistd library 
         // so that you can find a way to not display $ in the batch mode
+        // -- done, now need to figure out a way to make it quit. this means that the hwile 1 shouldn't happen anyumor
         fgets(userInput, MAX_USER_INPUT-1, stdin);
         errorCode = parseInput(userInput);
         if (errorCode == -1) exit(99);	// ignore all other errors
         memset(userInput, 0, sizeof(userInput));
+        if (!interactive){
+            exit(1);
+        }
     }
 
     return 0;
