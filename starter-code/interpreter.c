@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <dirent.h>
 #include "shellmemory.h"
 #include "shell.h"
 
@@ -16,7 +17,7 @@ int badcommandFileDoesNotExist() {
     printf("Bad command: File not found\n");
     return 3;
 }
-
+int list();
 int help();
 int quit();
 int set(char *var, char *value);
@@ -59,17 +60,19 @@ int interpreter(char *command_args[], int args_size) {
         if (args_size != 2)
             return badcommand();
         return print(command_args[1]);
-
     } else if (strcmp(command_args[0], "source") == 0) {
         if (args_size != 2)
             return badcommand();
         return source(command_args[1]);
-
     } 
     else if (strcmp(command_args[0], "echo") == 0){
 	    if (args_size != 2)
 		    return badcommand();
 	    return echo(command_args[1]);
+    } else if (strcmp(command_args[0], "my_ls") == 0) {
+      if (args_size !=1)
+	return badcommand();
+      return list();
     }
     else
         return badcommand();
@@ -138,7 +141,25 @@ int source(char *script) {
     return errCode;
 }
 
+
 int echo(char *string){
 	printf("%s\n", string);
  	return 0;
+}
+
+int list(){
+  // open current directory
+  DIR *cur_dir;
+  cur_dir = opendir("."); // open current dir
+  struct dirent *dp;
+  
+  while(1){
+    if ((dp = readdir(cur_dir)) != NULL){ // if we haven't reached the end of file
+      printf("%s\n", dp->d_name);
+      }
+      else{
+	closedir(cur_dir);
+	return 0;
+  }
+  }
 }
