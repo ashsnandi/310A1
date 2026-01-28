@@ -1,3 +1,5 @@
 *.o
 starter-code/mysh
 *~
+ssh*
+.ssh*

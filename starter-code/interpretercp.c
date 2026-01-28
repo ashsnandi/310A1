@@ -21,7 +21,6 @@ int badcommandFileDoesNotExist() {
     return 3;
 }
 int list();
-int makedir(char *dir_name);
 int help();
 int quit();
 int set(char *var, char *value);
@@ -151,34 +150,11 @@ int source(char *script) {
     return errCode;
 }
 
-int echo(char *string){
-        int errCode = 0;
-        if (string[0] == '$'){
-                if (strlen(string) == 1){
-                        printf("\n");
-                        errCode = 1;
-                }
-                else
-                {
-                        int len = strlen(string);
-                        char var[len-1];
-                        strncpy(var, string+1, len-1);
-                        char *val = mem_get_value(var);
-                        if(strcmp(val, "Variable does not exist") == 0){
-                                printf("\n");
-                                errCode = 2;
-                        }
-                        else{
-                                printf("%s\n", val);
-                        }
-                }
-        }
-        else{
-                printf("%s\n", string);
-        }
-        return errCode;
-}
 
+int echo(char *string){
+	printf("%s\n", string);
+ 	return 0;
+}
 
 int list(){
   // open current directory
@@ -198,10 +174,8 @@ int list(){
 }
 
 int makedir(char *dir_name){
-  // give the user permissions
-  mode_t permissions = S_IRWXU | S_IRWXG | S_IRWXO;
   if (mkdir(dir_name, permissions) == -1){
+    print("ERROR OUT")
     return 2;
-  } else {
   }
 }
