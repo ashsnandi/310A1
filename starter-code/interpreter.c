@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
+#include <unistd.h>
 #include <sys/stat.h>
 #include <errno.h>
 #include <sys/types.h>
@@ -21,7 +22,9 @@ int badcommandFileDoesNotExist() {
     return 3;
 }
 int list();
+int touchme(char *filename);
 int makedir(char *dir_name);
+int cdme(char *path);
 int help();
 int quit();
 int set(char *var, char *value);
@@ -81,6 +84,14 @@ int interpreter(char *command_args[], int args_size) {
       if (args_size !=2)
 	return badcommand();
       return makedir(command_args[1]);
+    } else if (strcmp(command_args[0], "my_touch") == 0) {
+      if (args_size !=2)
+	return badcommand();
+      return (touchme(command_args[1]));
+    } else if (strcmp(command_args[0], "my_cd") == 0) {
+      if (args_size !=2)
+	return badcommand();
+      return (cdme(command_args[1]));
     }
     else
         return badcommand();
@@ -203,5 +214,26 @@ int makedir(char *dir_name){
   if (mkdir(dir_name, permissions) == -1){
     return 2;
   } else {
+    return 0;
   }
+}
+
+
+int touchme(char *filename){
+  mode_t permissions = S_IRWXU | S_IRWXG | S_IRWXO;
+  FILE *f = fopen(filename, "a");
+  if (f == NULL){
+    return 2;
+  } 
+  fclose(f);
+  return 0;
+}
+
+int cdme(char *path){
+    //lowkey just chdir the path with error handling
+    if (chdir(path) != 0){
+        fprintf(stderr, "Error changing directory to %s: %s\n", path, strerror(errno));
+        return 1;
+    }
+    fprintf(stdout, "Changed to directory %s.\n", path);
 }
