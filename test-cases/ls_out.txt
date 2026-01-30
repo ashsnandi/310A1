@@ -1,1 +1,7 @@
 Shell version 1.5 created Dec 2025
+Changed to directory toto.
+f2
+..
+f1
+.
+Bye!

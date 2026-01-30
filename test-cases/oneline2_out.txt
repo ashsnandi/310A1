@@ -3,7 +3,6 @@ set.txt
 oneline_result.txt
 f
 source_result.txt
-echo_out.txt
 run.txt
 oneline_out.txt
 toto
@@ -16,6 +15,7 @@ oneline2_out.txt
 echo_result.txt
 mkdir_result.txt
 prompt.txt
+$dirname
 set_result.txt
 badcommand_out.txt
 mkdir_out.txt
@@ -34,4 +34,6 @@ oneline.txt
 ls_out.txt
 run_out.txt
 echo.txt
+$noExistVar
 .
+Bye!
