@@ -20,9 +20,7 @@ for input in *.txt; do
     echo "Test: $base"
 
     #run test 
-    "$mysh" <<EOF > "$output"
-    $(cat "$input")
-    EOF
+    "$mysh" < "$input" > "$output"
 
     #compare outputs
      if diff -q "$output" "$expected" > /dev/null; then
