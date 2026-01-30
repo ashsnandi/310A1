@@ -11,6 +11,7 @@ int parseInput(char ui[]);
 
 // Start of everything
 int main(int argc, char *argv[]) {
+    setvbuf(stdout, NULL, _IONBF, 0);
     printf("Shell version 1.5 created Dec 2025\n");
 
     // us code
@@ -34,13 +35,13 @@ int main(int argc, char *argv[]) {
         // here you should check the unistd library 
         // so that you can find a way to not display $ in the batch mode
         // -- done, now need to figure out a way to make it quit. this means that the hwile 1 shouldn't happen anyumor
-        fgets(userInput, MAX_USER_INPUT-1, stdin);
+        if(fgets(userInput, MAX_USER_INPUT-1, stdin) == NULL){
+            //eof reached in batch mode
+            break;
+        }
         errorCode = parseInput(userInput);
         if (errorCode == -1) exit(99);	// ignore all other errors
         memset(userInput, 0, sizeof(userInput));
-        if (!interactive){
-            exit(1);
-        }
     }
 
     return 0;
