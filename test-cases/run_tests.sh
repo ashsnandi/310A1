@@ -20,7 +20,9 @@ for input in *.txt; do
     echo "Test: $base"
 
     #run test 
-    stdbuf -oL "$mysh" < "$input" > "$output"
+    "$mysh" <<EOF > "$output"
+    $(cat "$input")
+    EOF
 
     #compare outputs
      if diff -q "$output" "$expected" > /dev/null; then
