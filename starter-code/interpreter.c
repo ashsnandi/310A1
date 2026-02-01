@@ -4,6 +4,7 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include <errno.h>
 #include <sys/types.h>
 #include "shellmemory.h"
@@ -31,6 +32,7 @@ int set(char *var, char *value);
 int print(char *var);
 int source(char *script);
 int echo(char *string);
+int run(char *command_args[], int args_size);
 int badcommandFileDoesNotExist();
 
 // Interpret commands and their arguments
@@ -92,6 +94,10 @@ int interpreter(char *command_args[], int args_size) {
       if (args_size !=2)
 	return badcommand();
       return (cdme(command_args[1]));
+    } else if (strcmp(command_args[0], "run") == 0) {
+      if (args_size < 2)
+	return badcommand();
+      return run(command_args, args_size);
     }
     else
         return badcommand();
@@ -299,3 +305,35 @@ int cdme(char *path){
     }
     return 0;
 }
+
+/*
+int run(char *command_args[], int args_size){
+    //fork it
+    pid_t pid = fork();
+
+    //fork failed
+    if (pid < 0){
+    // do we need erro
+        fprintf(stderr, "Fork failed\n");
+        return 1;
+    }
+    else if (pid == 0){
+        char *exec_args[args_size];  
+        for (int i = 1; i < args_size; i++){
+            exec_args[i-1] = command_args[i];
+        }
+        exec_args[args_size - 1] = NULL; //terminator at teh end of hti
+
+
+        //execute everything asked
+        execvp(exec_args[0], exec_args);
+        
+    }
+    else {
+        //thi sis hte parent
+        int status;
+        waitpid(pid, &status, 0);
+        return 0;
+    }
+}
+    */
