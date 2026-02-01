@@ -12,15 +12,17 @@
 
 int MAX_ARGS_SIZE = 3;
 
-int badcommand() {
-    printf("Unknown Command\n");
-    return 1;
+int badcommand()
+{
+  printf("Unknown Command\n");
+  return 1;
 }
 
 // For source command only
-int badcommandFileDoesNotExist() {
-    printf("Bad command: File not found\n");
-    return 3;
+int badcommandFileDoesNotExist()
+{
+  printf("Bad command: File not found\n");
+  return 3;
 }
 int list();
 int touchme(char *filename);
@@ -36,77 +38,98 @@ int run(char *command_args[], int args_size);
 int badcommandFileDoesNotExist();
 
 // Interpret commands and their arguments
-int interpreter(char *command_args[], int args_size) {
-    int i;
+int interpreter(char *command_args[], int args_size)
+{
+  int i;
 
-    if (args_size < 1 || args_size > MAX_ARGS_SIZE) {
-        return badcommand();
-    }
+  if (args_size < 1 || args_size > MAX_ARGS_SIZE)
+  {
+    return badcommand();
+  }
 
-    for (i = 0; i < args_size; i++) {   // terminate args at newlines
-        command_args[i][strcspn(command_args[i], "\r\n")] = 0;
-    }
+  for (i = 0; i < args_size; i++)
+  { // terminate args at newlines
+    command_args[i][strcspn(command_args[i], "\r\n")] = 0;
+  }
 
-    if (strcmp(command_args[0], "help") == 0) {
-        //help
-        if (args_size != 1)
-            return badcommand();
-        return help();
-
-    } else if (strcmp(command_args[0], "quit") == 0) {
-        //quit
-        if (args_size != 1)
-            return badcommand();
-        return quit();
-
-    } else if (strcmp(command_args[0], "set") == 0) {
-        //set
-        if (args_size != 3)
-            return badcommand();    
-        return set(command_args[1], command_args[2]);
-
-    } else if (strcmp(command_args[0], "print") == 0) {
-        if (args_size != 2)
-            return badcommand();
-        return print(command_args[1]);
-    } else if (strcmp(command_args[0], "source") == 0) {
-        if (args_size != 2)
-            return badcommand();
-        return source(command_args[1]);
-    } 
-    else if (strcmp(command_args[0], "echo") == 0){
-	    if (args_size != 2)
-		    return badcommand();
-	    return echo(command_args[1]);
-    } else if (strcmp(command_args[0], "my_ls") == 0) {
-      if (args_size !=1)
-	return badcommand();
-      return list();
-    } else if (strcmp(command_args[0], "my_mkdir") == 0) {
-      if (args_size !=2)
-	return badcommand();
-      return makedir(command_args[1]);
-    } else if (strcmp(command_args[0], "my_touch") == 0) {
-      if (args_size !=2)
-	return badcommand();
-      return (touchme(command_args[1]));
-    } else if (strcmp(command_args[0], "my_cd") == 0) {
-      if (args_size !=2)
-	return badcommand();
-      return (cdme(command_args[1]));
-    } else if (strcmp(command_args[0], "run") == 0) {
-      if (args_size < 2)
-	return badcommand();
-      return run(command_args, args_size);
-    }
-    else
-        return badcommand();
+  if (strcmp(command_args[0], "help") == 0)
+  {
+    // help
+    if (args_size != 1)
+      return badcommand();
+    return help();
+  }
+  else if (strcmp(command_args[0], "quit") == 0)
+  {
+    // quit
+    if (args_size != 1)
+      return badcommand();
+    return quit();
+  }
+  else if (strcmp(command_args[0], "set") == 0)
+  {
+    // set
+    if (args_size != 3)
+      return badcommand();
+    return set(command_args[1], command_args[2]);
+  }
+  else if (strcmp(command_args[0], "print") == 0)
+  {
+    if (args_size != 2)
+      return badcommand();
+    return print(command_args[1]);
+  }
+  else if (strcmp(command_args[0], "source") == 0)
+  {
+    if (args_size != 2)
+      return badcommand();
+    return source(command_args[1]);
+  }
+  else if (strcmp(command_args[0], "echo") == 0)
+  {
+    if (args_size != 2)
+      return badcommand();
+    return echo(command_args[1]);
+  }
+  else if (strcmp(command_args[0], "my_ls") == 0)
+  {
+    if (args_size != 1)
+      return badcommand();
+    return list();
+  }
+  else if (strcmp(command_args[0], "my_mkdir") == 0)
+  {
+    if (args_size != 2)
+      return badcommand();
+    return makedir(command_args[1]);
+  }
+  else if (strcmp(command_args[0], "my_touch") == 0)
+  {
+    if (args_size != 2)
+      return badcommand();
+    return (touchme(command_args[1]));
+  }
+  else if (strcmp(command_args[0], "my_cd") == 0)
+  {
+    if (args_size != 2)
+      return badcommand();
+    return (cdme(command_args[1]));
+  }
+  else if (strcmp(command_args[0], "run") == 0)
+  {
+    if (args_size < 2)
+      return badcommand();
+    return run(command_args, args_size);
+  }
+  else
+    return badcommand();
 }
 
-int help() {
+int help()
+{
 
-    // note the literal tab characters here for alignment
-    char help_string[] = "COMMAND			DESCRIPTION\n \
+  // note the literal tab characters here for alignment
+  char help_string[] = "COMMAND			DESCRIPTION\n \
 help			Displays all the commands\n \
 quit			Exits / terminates the shell with “Bye!”\n \
 set VAR STRING		Assigns a value to shell memory\n \
@@ -115,225 +138,259 @@ source SCRIPT.TXT	Executes the file SCRIPT.TXT\n \
 echo STRING		Prints string \
 my_ls                   Lists all files and folders in the current directory \
 my_mkdir dirname creates a new directory with the name dirname in the current directory.";
-    printf("%s\n", help_string);
-    return 0;
+  printf("%s\n", help_string);
+  return 0;
 }
 
-int quit() {
-    printf("Bye!\n");
-    exit(0);
+int quit()
+{
+  printf("Bye!\n");
+  exit(0);
 }
 
-int set(char *var, char *value) {
-    // Challenge: allow setting VAR to the rest of the input line,
-    // possibly including spaces.
+int set(char *var, char *value)
+{
+  // Challenge: allow setting VAR to the rest of the input line,
+  // possibly including spaces.
 
-    // Hint: Since "value" might contain multiple tokens, you'll need to loop
-    // through them, concatenate each token to the buffer, and handle spacing
-    // appropriately. Investigate how `strcat` works and how you can use it
-    // effectively here.
+  // Hint: Since "value" might contain multiple tokens, you'll need to loop
+  // through them, concatenate each token to the buffer, and handle spacing
+  // appropriately. Investigate how `strcat` works and how you can use it
+  // effectively here.
 
-    mem_set_value(var, value);
-    return 0;
+  mem_set_value(var, value);
+  return 0;
 }
 
-
-int print(char *var) {
-    printf("%s\n", mem_get_value(var));
-    return 0;
+int print(char *var)
+{
+  printf("%s\n", mem_get_value(var));
+  return 0;
 }
 
-int source(char *script) {
-    int errCode = 0;
-    char line[MAX_USER_INPUT];
-    FILE *p = fopen(script, "rt");      // the program is in a file
+int source(char *script)
+{
+  int errCode = 0;
+  char line[MAX_USER_INPUT];
+  FILE *p = fopen(script, "rt"); // the program is in a file
 
-    if (p == NULL) {
-        return badcommandFileDoesNotExist();
+  if (p == NULL)
+  {
+    return badcommandFileDoesNotExist();
+  }
+
+  fgets(line, MAX_USER_INPUT - 1, p);
+  while (1)
+  {
+    errCode = parseInput(line); // which calls interpreter()
+    memset(line, 0, sizeof(line));
+
+    if (feof(p))
+    {
+      break;
     }
-
     fgets(line, MAX_USER_INPUT - 1, p);
-    while (1) {
-        errCode = parseInput(line);     // which calls interpreter()
-        memset(line, 0, sizeof(line));
+  }
 
-        if (feof(p)) {
-            break;
-        }
-        fgets(line, MAX_USER_INPUT - 1, p);
+  fclose(p);
+
+  return errCode;
+}
+
+int echo(char *string)
+{
+  int errCode = 0;
+  // check if echo is taking a variable name as an input, by looking at first char of argument == '$'
+  if (string[0] == '$')
+  {
+    // edge case: no variable name -> error code
+    if (strlen(string) == 1)
+    {
+      printf("\n");
+      errCode = 1;
     }
-
-    fclose(p);
-
-    return errCode;
+    //check if variable name exists in shell memory
+    else
+    {
+      int len = strlen(string);
+      char var[len - 1];
+      strncpy(var, string + 1, len - 1);
+      char *val = mem_get_value(var);
+      if (strcmp(val, "Variable does not exist") == 0)
+      {
+        printf("\n");
+        errCode = 2;
+      }
+      else
+      {
+        printf("%s\n", val);
+      }
+    }
+  }
+  //regular case: print back first argument
+  else
+  {
+    printf("%s\n", string);
+  }
+  return errCode;
 }
 
-int echo(char *string){
-        int errCode = 0;
-        if (string[0] == '$'){
-                if (strlen(string) == 1){
-                        printf("\n");
-                        errCode = 1;
-                }
-                else
-                {
-                        int len = strlen(string);
-                        char var[len-1];
-                        strncpy(var, string+1, len-1);
-                        char *val = mem_get_value(var);
-                        if(strcmp(val, "Variable does not exist") == 0){
-                                printf("\n");
-                                errCode = 2;
-                        }
-                        else{
-                                printf("%s\n", val);
-                        }
-                }
-        }
-        else{
-                printf("%s\n", string);
-        }
-        return errCode;
-}
-
-
-int list(){
+int list()
+{
   // open current directory
   DIR *cur_dir;
   cur_dir = opendir("."); // open current dir
   struct dirent *dp;
-  
-  
-  char *filenames[1000];  
+
+  char *filenames[1000];
   int count = 0;
-  
-  while((dp = readdir(cur_dir)) != NULL){
+
+  while ((dp = readdir(cur_dir)) != NULL)
+  {
     filenames[count] = strdup(dp->d_name);
     count++;
   }
   closedir(cur_dir);
-  
+
   // sort file names with bubble sort
-  for (int i = 0; i < count - 1; i++){
-    for (int j = i + 1; j < count; j++){
-      if (strcmp(filenames[i], filenames[j]) > 0){
-        
+  for (int i = 0; i < count - 1; i++)
+  {
+    for (int j = i + 1; j < count; j++)
+    {
+      if (strcmp(filenames[i], filenames[j]) > 0)
+      {
+
         char *temp = filenames[i];
         filenames[i] = filenames[j];
         filenames[j] = temp;
       }
     }
   }
-  
+
   // Print sorted filenames
-  for (int i = 0; i < count; i++){
+  for (int i = 0; i < count; i++)
+  {
     printf("%s\n", filenames[i]);
     free(filenames[i]);
   }
-  
+
   return 0;
 }
 
-int makedir(char *dir_name){
+int makedir(char *dir_name)
+{
   mode_t permissions = S_IRWXU | S_IRWXG | S_IRWXO;
   char actual_dir_name[256];
 
   // uh oh! check the dir name
-  if (dir_name[0] == '$'){
+  if (dir_name[0] == '$')
+  {
     // if its a varialbe name place look fo rhte variable in meme
     char var_name[256];
-    strcpy(var_name, dir_name + 1);  // skip the $
-    
+    strcpy(var_name, dir_name + 1); // skip the $
+
     char *var_value = mem_get_value(var_name);
 
-
     // variable exist?
-    if (strcmp(var_value, "Variable does not exist") == 0){
+    if (strcmp(var_value, "Variable does not exist") == 0)
+    {
       printf("Bad command: my_mkdir\n");
       return 1;
     }
-    
-    
+
     int valid = 1;
     int len = strlen(var_value);
-    if (len == 0){
+    if (len == 0)
+    {
       valid = 0;
     }
-    for (int i = 0; i < len; i++){
+    for (int i = 0; i < len; i++)
+    {
       if (!((var_value[i] >= 'a' && var_value[i] <= 'z') ||
             (var_value[i] >= 'A' && var_value[i] <= 'Z') ||
-            (var_value[i] >= '0' && var_value[i] <= '9'))){
+            (var_value[i] >= '0' && var_value[i] <= '9')))
+      {
         valid = 0;
         break;
-      } //ensuring resitrctions of names (unsure if neccesary)
+      } // ensuring resitrctions of names (unsure if neccesary)
     }
-    
-    if (!valid){
+
+    if (!valid)
+    {
       printf("Bad command: my_mkdir\n");
       return 1;
     }
-    
+
     strcpy(actual_dir_name, var_value);
-  } else {
+  }
+  else
+  {
     // Direct directory name
     strcpy(actual_dir_name, dir_name);
   }
-  
-  if (mkdir(actual_dir_name, permissions) == -1){
+
+  if (mkdir(actual_dir_name, permissions) == -1)
+  {
     return 2;
-  } else {
+  }
+  else
+  {
     return 0;
   }
 }
 
-
-int touchme(char *filename){
+int touchme(char *filename)
+{
   mode_t permissions = S_IRWXU | S_IRWXG | S_IRWXO;
   FILE *f = fopen(filename, "a");
-  if (f == NULL){
+  if (f == NULL)
+  {
     return 2;
-  } 
+  }
   fclose(f);
   return 0;
 }
 
-int cdme(char *path){
-    //lowkey just chdir the path with error handling
-    if (chdir(path) != 0){
-        printf("Bad command: my_cd\n");
-        return 1;
-    }
-    return 0;
+int cdme(char *path)
+{
+  // lowkey just chdir the path with error handling
+  if (chdir(path) != 0)
+  {
+    printf("Bad command: my_cd\n");
+    return 1;
+  }
+  return 0;
 }
 
-/*
-int run(char *command_args[], int args_size){
-    //fork it
-    pid_t pid = fork();
+int run(char *command_args[], int args_size)
+{
+  // fork it
+  pid_t pid = fork();
 
-    //fork failed
-    if (pid < 0){
+  // fork failed
+  if (pid < 0)
+  {
     // do we need erro
-        fprintf(stderr, "Fork failed\n");
-        return 1;
+    fprintf(stderr, "Fork failed\n");
+    return 1;
+  }
+  else if (pid == 0)
+  {
+    char *exec_args[args_size];
+    for (int i = 1; i < args_size; i++)
+    {
+      exec_args[i - 1] = command_args[i];
     }
-    else if (pid == 0){
-        char *exec_args[args_size];  
-        for (int i = 1; i < args_size; i++){
-            exec_args[i-1] = command_args[i];
-        }
-        exec_args[args_size - 1] = NULL; //terminator at teh end of hti
+    exec_args[args_size - 1] = NULL; // terminator at teh end of hti
 
-
-        //execute everything asked
-        execvp(exec_args[0], exec_args);
-        
-    }
-    else {
-        //thi sis hte parent
-        int status;
-        waitpid(pid, &status, 0);
-        return 0;
-    }
+    // execute everything asked
+    execvp(exec_args[0], exec_args);
+  }
+  else
+  {
+    // thi sis hte parent
+    int status;
+    waitpid(pid, &status, 0);
+    return 0;
+  }
 }
-    */
