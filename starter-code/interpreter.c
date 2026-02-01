@@ -60,7 +60,7 @@ int interpreter(char *command_args[], int args_size) {
     } else if (strcmp(command_args[0], "set") == 0) {
         //set
         if (args_size != 3)
-            return badcommand();
+            return badcommand();    
         return set(command_args[1], command_args[2]);
 
     } else if (strcmp(command_args[0], "print") == 0) {
@@ -197,21 +197,83 @@ int list(){
   cur_dir = opendir("."); // open current dir
   struct dirent *dp;
   
-  while(1){
-    if ((dp = readdir(cur_dir)) != NULL){ // if we haven't reached the end of file
-      printf("%s\n", dp->d_name);
+  
+  char *filenames[1000];  
+  int count = 0;
+  
+  while((dp = readdir(cur_dir)) != NULL){
+    filenames[count] = strdup(dp->d_name);
+    count++;
+  }
+  closedir(cur_dir);
+  
+  // sort file names with bubble sort
+  for (int i = 0; i < count - 1; i++){
+    for (int j = i + 1; j < count; j++){
+      if (strcmp(filenames[i], filenames[j]) > 0){
+        
+        char *temp = filenames[i];
+        filenames[i] = filenames[j];
+        filenames[j] = temp;
       }
-      else{
-	closedir(cur_dir);
-	return 0;
+    }
   }
+  
+  // Print sorted filenames
+  for (int i = 0; i < count; i++){
+    printf("%s\n", filenames[i]);
+    free(filenames[i]);
   }
+  
+  return 0;
 }
 
 int makedir(char *dir_name){
-  // give the user permissions
   mode_t permissions = S_IRWXU | S_IRWXG | S_IRWXO;
-  if (mkdir(dir_name, permissions) == -1){
+  char actual_dir_name[256];
+
+  // uh oh! check the dir name
+  if (dir_name[0] == '$'){
+    // if its a varialbe name place look fo rhte variable in meme
+    char var_name[256];
+    strcpy(var_name, dir_name + 1);  // skip the $
+    
+    char *var_value = mem_get_value(var_name);
+
+
+    // variable exist?
+    if (strcmp(var_value, "Variable does not exist") == 0){
+      printf("Bad command: my_mkdir\n");
+      return 1;
+    }
+    
+    
+    int valid = 1;
+    int len = strlen(var_value);
+    if (len == 0){
+      valid = 0;
+    }
+    for (int i = 0; i < len; i++){
+      if (!((var_value[i] >= 'a' && var_value[i] <= 'z') ||
+            (var_value[i] >= 'A' && var_value[i] <= 'Z') ||
+            (var_value[i] >= '0' && var_value[i] <= '9'))){
+        valid = 0;
+        break;
+      } //ensuring resitrctions of names (unsure if neccesary)
+    }
+    
+    if (!valid){
+      printf("Bad command: my_mkdir\n");
+      return 1;
+    }
+    
+    strcpy(actual_dir_name, var_value);
+  } else {
+    // Direct directory name
+    strcpy(actual_dir_name, dir_name);
+  }
+  
+  if (mkdir(actual_dir_name, permissions) == -1){
     return 2;
   } else {
     return 0;
@@ -232,8 +294,8 @@ int touchme(char *filename){
 int cdme(char *path){
     //lowkey just chdir the path with error handling
     if (chdir(path) != 0){
-        fprintf(stderr, "Error changing directory to %s: %s\n", path, strerror(errno));
+        printf("Bad command: my_cd\n");
         return 1;
     }
-    fprintf(stdout, "Changed to directory %s.\n", path);
+    return 0;
 }
