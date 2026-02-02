@@ -341,11 +341,11 @@ int makedir(char *dir_name)
 
 int touchme(char *filename)
 {
-  mode_t permissions = S_IRWXU | S_IRWXG | S_IRWXO;
-  FILE *f = fopen(filename, "a");
+  mode_t permissions = S_IRWXU | S_IRWXG | S_IRWXO; //found thi sin uistd but not needed for touching
+  FILE *f = fopen(filename, "a"); // create the file by fopening it, using a so that it doesn;t overrwrite existing fies
   if (f == NULL)
   {
-    return 2;
+    return 2; //if the file messed up in any way return aner ror code
   }
   fclose(f);
   return 0;
@@ -364,7 +364,7 @@ int cdme(char *path)
 
 int run(char *command_args[], int args_size)
 {
-  // fork it
+  // fork it!!
   pid_t pid = fork();
 
   // fork failed
@@ -374,9 +374,9 @@ int run(char *command_args[], int args_size)
     fprintf(stderr, "Fork failed\n");
     return 1;
   }
-  else if (pid == 0)
+  else if (pid == 0) //this is a child!!
   {
-    char *exec_args[args_size];
+    char *exec_args[args_size]; //fork and execute o7! yes sir
     for (int i = 1; i < args_size; i++)
     {
       exec_args[i - 1] = command_args[i];
