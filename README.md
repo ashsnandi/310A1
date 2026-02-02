@@ -3,7 +3,7 @@
 
 ### Project compilation
 To compile the project:
-1. cd to ./starter-code
+1. cd to ./project/src
 2. run: make clean; make mysh;
 
 ### Running the shell

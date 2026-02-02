@@ -1,6 +1,6 @@
 #!/bin/bash
 
-mysh=../starter-code/mysh
+mysh=../project/src/mysh
 
 pass=0
 fail=0

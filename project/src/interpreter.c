@@ -321,7 +321,7 @@ int makedir(char *dir_name)
       return 1;
     }
 
-    strcpy(actual_dir_name, var_value);
+    strcpy(actual_dir_name, var_value); // dir name is the variable value
   }
   else
   {
