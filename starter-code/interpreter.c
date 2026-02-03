@@ -242,17 +242,17 @@ int list()
   cur_dir = opendir("."); // open current dir
   struct dirent *dp;
 
-  char *filenames[1000];
+  char *filenames[1000]; // directory random limitation
   int count = 0;
 
   while ((dp = readdir(cur_dir)) != NULL)
   {
     filenames[count] = strdup(dp->d_name);
-    count++;
+    count++; // add every single directry name to filenames
   }
   closedir(cur_dir);
 
-  // sort file names with bubble sort
+  //bubble sort file names (not efficient but i tink thats maybe okay)
   for (int i = 0; i < count - 1; i++)
   {
     for (int j = i + 1; j < count; j++)
@@ -285,7 +285,7 @@ int makedir(char *dir_name)
   // uh oh! check the dir name
   if (dir_name[0] == '$')
   {
-    // if its a varialbe name place look fo rhte variable in meme
+    // if its a varialbe name place look fo rhte variable in memory
     char var_name[256];
     strcpy(var_name, dir_name + 1); // skip the $
 
